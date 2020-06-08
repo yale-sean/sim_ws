@@ -1,0 +1,18 @@
+{
+  "name": "shutter-workspace",
+  "version": "1.0.0",
+  "description": "A wrapper for docker-compose to set env vars and make running easier",
+  "repository": {
+    "url": "https://example.com/your-username/my-new-project",
+    "type": "git"
+  },
+  "scripts": {
+    "build": "./.build_env && docker-compose -f docker/docker-compose.yml build",
+    "up": "./.build_env && docker-compose -f docker/docker-compose.yml up",
+    "kill": "./.build_env && docker-compose -f docker/docker-compose.yml kill",
+    "shell": "./.build_env && docker-compose -f docker/docker-compose.yml run --service-ports ros-shell",
+    "sudo": "./.build_env && docker run -it --entrypoint=/bin/bash docker_ros-shell"
+  },
+  "author": "Nathan Tsoi <nathan.tsoi@yale.edu>",
+  "license": "MIT"
+}

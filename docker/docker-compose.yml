@@ -1,0 +1,76 @@
+version: '2.4'
+services:
+  # builds the code in the workspace
+  ros-build:
+    build:
+      context: ./ros
+      args:
+        userid: "${USERID}"
+        username: "${USERNAME}"
+        groupid: "${GROUPID}"
+        workspacename: "${WORKSPACENAME}"
+    image: ros-build:shutter
+    runtime: nvidia
+    command: /home/${USERNAME}/${WORKSPACENAME}/docker/scripts/services/build.sh
+    user: "${USERID}:${GROUPID}"
+    volumes:
+      - ../:/home/${USERNAME}/${WORKSPACENAME}
+      - ../../.bash_history:/home/${USERNAME}/.bash_history
+  # ros master node
+  ros-master:
+    build:
+      context: ./ros
+      args:
+        userid: "${USERID}"
+        username: "${USERNAME}"
+        groupid: "${GROUPID}"
+        workspacename: "${WORKSPACENAME}"
+    image: ros-master:shutter
+    networks:
+      - default
+    ports:
+      - "11311:11311"
+    runtime: nvidia
+    command: /home/${USERNAME}/${WORKSPACENAME}/docker/scripts/services/master.sh
+    user: "${USERID}:${GROUPID}"
+    volumes:
+      - ../:/home/${USERNAME}/${WORKSPACENAME}
+      - ../../.bash_history:/home/${USERNAME}/.bash_history
+  # shell node for interactive usage
+  ros-shell:
+    depends_on:
+      - "ros-master"
+    build:
+      context: ./ros
+      args:
+        userid: "${USERID}"
+        username: "${USERNAME}"
+        groupid: "${GROUPID}"
+        workspacename: "${WORKSPACENAME}"
+    image: ros-shell:shutter
+    networks:
+      - default
+    runtime: nvidia
+    environment:
+      - "SKIP_BUILD=1"
+      - "ROS_MASTER_URI=http://ros-master:11311"
+      - "DISPLAY=:20"
+    command: /home/${USERNAME}/${WORKSPACENAME}/docker/scripts/services/shell.sh
+    user: "${USERID}:${GROUPID}"
+    group_add:
+      - dialout
+    privileged: true
+    volumes:
+      - ../:/home/${USERNAME}/${WORKSPACENAME}
+      - /data:/data
+      - /nvme:/nvme
+      - ../../.bash_history:/home/${USERNAME}/.bash_history
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - /dev/bus/usb:/dev/bus/usb
+      - /run/udev:/run/udev:ro
+    stdin_open: true
+    tty: true
+
+networks:
+  default:
+    driver: bridge
