@@ -9,7 +9,7 @@ services:
         username: "${USERNAME}"
         groupid: "${GROUPID}"
         workspacename: "${WORKSPACENAME}"
-    image: ros-build:shutter
+    image: ros-build:social-sim
     runtime: nvidia
     command: /home/${USERNAME}/${WORKSPACENAME}/docker/scripts/services/build.sh
     user: "${USERID}:${GROUPID}"
@@ -25,13 +25,37 @@ services:
         username: "${USERNAME}"
         groupid: "${GROUPID}"
         workspacename: "${WORKSPACENAME}"
-    image: ros-master:shutter
+    image: ros-master:social-sim
     networks:
       - default
     ports:
       - "11311:11311"
     runtime: nvidia
+    environment:
+      - "ROS_MASTER_URI=http://ros-master:11311"
     command: /home/${USERNAME}/${WORKSPACENAME}/docker/scripts/services/master.sh
+    user: "${USERID}:${GROUPID}"
+    volumes:
+      - ../:/home/${USERNAME}/${WORKSPACENAME}
+      - ../../.bash_history:/home/${USERNAME}/.bash_history
+  # ros-bridge node
+  ros-bridge:
+    build:
+      context: ./ros
+      args:
+        userid: "${USERID}"
+        username: "${USERNAME}"
+        groupid: "${GROUPID}"
+        workspacename: "${WORKSPACENAME}"
+    image: ros-bridge:social-sim
+    networks:
+      - default
+    ports:
+      - "9090:9090"
+    runtime: nvidia
+    environment:
+      - "ROS_MASTER_URI=http://ros-master:11311"
+    command: /home/${USERNAME}/${WORKSPACENAME}/docker/scripts/services/bridge.sh
     user: "${USERID}:${GROUPID}"
     volumes:
       - ../:/home/${USERNAME}/${WORKSPACENAME}
@@ -47,14 +71,14 @@ services:
         username: "${USERNAME}"
         groupid: "${GROUPID}"
         workspacename: "${WORKSPACENAME}"
-    image: ros-shell:shutter
+    image: ros-shell:social-sim
     networks:
       - default
     runtime: nvidia
     environment:
       - "SKIP_BUILD=1"
       - "ROS_MASTER_URI=http://ros-master:11311"
-      - "DISPLAY=:20"
+      - "DISPLAY=:1"
     command: /home/${USERNAME}/${WORKSPACENAME}/docker/scripts/services/shell.sh
     user: "${USERID}:${GROUPID}"
     group_add:
