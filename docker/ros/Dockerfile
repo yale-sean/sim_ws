@@ -166,7 +166,7 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-ros-control \
     ros-${ROS_DISTRO}-diff-drive-controller \
     ros-${ROS_DISTRO}-four-wheel-steering-msgs \
-    ros-${ROS_DISTRO}-urdf-geometry-parse \
+    ros-${ROS_DISTRO}-urdf-geometry-parser \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=nvidia/opengl:1.0-glvnd-runtime-ubuntu18.04 /usr/share/glvnd/egl_vendor.d/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
