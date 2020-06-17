@@ -167,6 +167,12 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-diff-drive-controller \
     ros-${ROS_DISTRO}-four-wheel-steering-msgs \
     ros-${ROS_DISTRO}-urdf-geometry-parser \
+    ros-${ROS_DISTRO}-jackal-description \
+    ros-${ROS_DISTRO}-jackal-navigation \
+    ros-${ROS_DISTRO}-jackal-viz \
+    ros-${ROS_DISTRO}-cartographer-ros \
+    ros-${ROS_DISTRO}-map-server \
+    ros-${ROS_DISTRO}-move-base \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=nvidia/opengl:1.0-glvnd-runtime-ubuntu18.04 /usr/share/glvnd/egl_vendor.d/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
