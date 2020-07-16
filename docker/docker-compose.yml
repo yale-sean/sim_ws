@@ -91,6 +91,7 @@ services:
       - ../../.bash_history:/home/${USERNAME}/.bash_history
       - /tmp/.X11-unix:/tmp/.X11-unix:ro
       - /dev/bus/usb:/dev/bus/usb
+      - /dev/input/js0:/dev/ps3joy
       - /run/udev:/run/udev:ro
     stdin_open: true
     tty: true

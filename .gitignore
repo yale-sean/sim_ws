@@ -1,5 +1,6 @@
 src
 databags
+experiments
 build.lock
 yarn-error.log
 .env

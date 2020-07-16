@@ -173,6 +173,11 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-cartographer-ros \
     ros-${ROS_DISTRO}-map-server \
     ros-${ROS_DISTRO}-move-base \
+    ros-${ROS_DISTRO}-joy \
+    ros-${ROS_DISTRO}-ps3joy \
+    ros-${ROS_DISTRO}-velodyne \
+    ros-${ROS_DISTRO}-velodyne-pointcloud \
+    ros-${ROS_DISTRO}-pointcloud-to-laserscan \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=nvidia/opengl:1.0-glvnd-runtime-ubuntu18.04 /usr/share/glvnd/egl_vendor.d/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
