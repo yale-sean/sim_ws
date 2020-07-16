@@ -42,6 +42,10 @@ windows:
           - sleep 10
           - yarn shell
           - rosrun nodelet nodelet standalone velodyne_pointcloud/CloudNodelet
+        - velodyne_to_scan:
+          - sleep 10
+          - yarn shell
+          - roslaunch social_sim_ros velodyne_to_laser.launch
         #- joy:
         #  - sleep 10
         #  - yarn shell
