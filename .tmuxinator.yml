@@ -41,7 +41,7 @@ windows:
         - velodyne:
           - sleep 10
           - yarn shell
-          - rosrun nodelet nodelet standalone velodyne_pointcloud/CloudNodelet
+          - roslaunch velodyne_pointcloud VLP16_points.launch
         - velodyne_to_scan:
           - sleep 10
           - yarn shell
