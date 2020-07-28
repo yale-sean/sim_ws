@@ -170,6 +170,7 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-jackal-description \
     ros-${ROS_DISTRO}-jackal-navigation \
     ros-${ROS_DISTRO}-jackal-viz \
+    ros-${ROS_DISTRO}-warthog-description \
     ros-${ROS_DISTRO}-cartographer-ros \
     ros-${ROS_DISTRO}-map-server \
     ros-${ROS_DISTRO}-move-base \
