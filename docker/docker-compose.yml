@@ -78,7 +78,7 @@ services:
     environment:
       - "SKIP_BUILD=1"
       - "ROS_MASTER_URI=http://ros-master:11311"
-      - "DISPLAY=:1"
+      - "DISPLAY=${DISPLAY}"
     command: /home/${USERNAME}/${WORKSPACENAME}/docker/scripts/services/shell.sh
     user: "${USERID}:${GROUPID}"
     group_add:

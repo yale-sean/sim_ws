@@ -179,6 +179,7 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-velodyne \
     ros-${ROS_DISTRO}-velodyne-pointcloud \
     ros-${ROS_DISTRO}-pointcloud-to-laserscan \
+    ros-${ROS_DISTRO}-rospy-message-converter \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=nvidia/opengl:1.0-glvnd-runtime-ubuntu18.04 /usr/share/glvnd/egl_vendor.d/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json

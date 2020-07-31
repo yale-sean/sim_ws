@@ -6,3 +6,4 @@ echo "USERID=$(id -u)" > ${DIR}/.env
 echo "USERNAME=$(whoami)" >> ${DIR}/.env
 echo "GROUPID=$(id -g)" >> ${DIR}/.env
 echo "WORKSPACENAME=$(basename ${DIR})" >> ${DIR}/.env
+echo "DISPLAY=$(echo $DISPLAY)" >> ${DIR}/.env
