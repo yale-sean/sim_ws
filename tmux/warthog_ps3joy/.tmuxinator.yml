@@ -1,4 +1,4 @@
-name: sim_ws
+name: ps3joy
 root: ~/sim_ws
 
 windows:
@@ -17,26 +17,30 @@ windows:
           - sleep 10
           - yarn shell
           - rosrun social_sim_ros odom_to_tf.py
-        - move_base:
-          - printf '\033]2;%s\033\\' 'odom_to_tf.py'
+        #- move_base:
+        #  - printf '\033]2;%s\033\\' 'odom_to_tf.py'
+        #  - sleep 10
+        #  - yarn shell
+        #  - roslaunch --wait social_sim_ros jackal_move_base.launch
+        - joy:
           - sleep 10
           - yarn shell
-          - roslaunch --wait social_sim_ros jackal_move_base.launch
+          - roslaunch --wait social_sim_teleop ps3_teleop.launch
         - rqt_graph:
           - printf '\033]2;%s\033\\' 'rqt_graph'
           - sleep 10
           - yarn shell
           - rqt_graph
         - description:
-          - printf '\033]2;%s\033\\' 'jackal_description.launch'
+          - printf '\033]2;%s\033\\' 'warthog_description.launch'
           - sleep 10
           - yarn shell
-          - roslaunch --wait social_sim_ros jackal_description.launch
+          - roslaunch --wait social_sim_ros warthog_description.launch
         - differential_drive:
-          - printf '\033]2;%s\033\\' 'differential_drive_jackal.launch'
+          - printf '\033]2;%s\033\\' 'differential_drive_warthog.launch'
           - sleep 10
           - yarn shell
-          - roslaunch --wait social_sim_ros differential_drive_jackal.launch
+          - roslaunch --wait social_sim_ros differential_drive_warthog.launch
         - gmapping:
           - printf '\033]2;%s\033\\' 'gmapping_jackal.launch'
           - sleep 10
