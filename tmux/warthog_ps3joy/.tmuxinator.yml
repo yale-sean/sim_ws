@@ -37,10 +37,10 @@ windows:
           - yarn shell
           - roslaunch --wait social_sim_ros warthog_description.launch
         - differential_drive:
-          - printf '\033]2;%s\033\\' 'differential_drive_warthog.launch'
+          - printf '\033]2;%s\033\\' 'differential_drive_jackal.launch'
           - sleep 10
           - yarn shell
-          - roslaunch --wait social_sim_ros differential_drive_warthog.launch
+          - roslaunch --wait social_sim_ros differential_drive_jackal.launch
         - gmapping:
           - printf '\033]2;%s\033\\' 'gmapping_jackal.launch'
           - sleep 10
