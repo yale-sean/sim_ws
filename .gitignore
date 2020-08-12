@@ -12,3 +12,4 @@ node_modules
 .catkin_tools
 logs/*
 tmp/*
+.bash_history
