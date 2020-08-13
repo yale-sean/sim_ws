@@ -1,5 +1,5 @@
 {
-  "name": "shutter-workspace",
+  "name": "sim-workspace",
   "version": "1.0.0",
   "description": "A wrapper for docker-compose to set env vars and make running easier",
   "repository": {
