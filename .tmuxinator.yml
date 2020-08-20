@@ -8,52 +8,52 @@ windows:
         - shell:
           - printf '\033]2;%s\033\\' 'shell'
           - sleep 10
-          - yarn shell
+          - yarn shell || echo 'yarn not found. running on host'
         - up:
           - printf '\033]2;%s\033\\' 'yarn up'
-          - yarn up
+          - yarn shell || echo 'yarn not found. running on host'
         - odom_to_tf:
           - printf '\033]2;%s\033\\' 'odom_to_tf.py'
           - sleep 10
-          - yarn shell
+          - yarn shell || echo 'yarn not found. running on host'
           - rosrun social_sim_ros odom_to_tf.py
         - move_base:
           - printf '\033]2;%s\033\\' 'odom_to_tf.py'
           - sleep 10
-          - yarn shell
+          - yarn shell || echo 'yarn not found. running on host'
           - roslaunch --wait social_sim_ros jackal_move_base.launch
         - rqt_graph:
           - printf '\033]2;%s\033\\' 'rqt_graph'
           - sleep 10
-          - yarn shell
+          - yarn shell || echo 'yarn not found. running on host'
           - rqt_graph
         - description:
           - printf '\033]2;%s\033\\' 'jackal_description.launch'
           - sleep 10
-          - yarn shell
+          - yarn shell || echo 'yarn not found. running on host'
           - roslaunch --wait social_sim_ros jackal_description.launch
         - differential_drive:
           - printf '\033]2;%s\033\\' 'differential_drive_jackal.launch'
           - sleep 10
-          - yarn shell
+          - yarn shell || echo 'yarn not found. running on host'
           - roslaunch --wait social_sim_ros differential_drive_jackal.launch
         - gmapping:
           - printf '\033]2;%s\033\\' 'gmapping_jackal.launch'
           - sleep 10
-          - yarn shell
+          - yarn shell || echo 'yarn not found. running on host'
           - roslaunch --wait social_sim_ros gmapping_jackal.launch
         - rviz:
           - printf '\033]2;%s\033\\' 'rviz'
           - sleep 10
-          - yarn shell
+          - yarn shell || echo 'yarn not found. running on host'
           - rosrun rviz rviz -d $(rospack find social_sim_ros)/config/jackal_move.rviz
         - velodyne:
           - printf '\033]2;%s\033\\' 'velodyne_pointcloud'
           - sleep 10
-          - yarn shell
+          - yarn shell || echo 'yarn not found. running on host'
           - roslaunch --wait velodyne_pointcloud VLP16_points.launch
         - velodyne_to_scan:
           - printf '\033]2;%s\033\\' 'jackal_velodyne_to_laser'
           - sleep 10
-          - yarn shell
+          - yarn shell || echo 'yarn not found. running on host'
           - roslaunch --wait social_sim_ros jackal_velodyne_to_laser.launch

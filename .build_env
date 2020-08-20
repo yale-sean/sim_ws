@@ -7,3 +7,9 @@ echo "USERNAME=$(whoami)" >> ${DIR}/.env
 echo "GROUPID=$(id -g)" >> ${DIR}/.env
 echo "WORKSPACENAME=$(basename ${DIR})" >> ${DIR}/.env
 echo "DISPLAY=$(echo $DISPLAY)" >> ${DIR}/.env
+
+if ! command -v docker-compose &> /dev/null
+then
+    echo "docker-compose could not be found, aliasing and continuing"
+    alias docker-compose="echo Skipping docker container initialization. Install docker-compose if you intend to use docker!"
+fi
