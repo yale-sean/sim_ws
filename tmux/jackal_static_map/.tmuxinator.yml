@@ -16,11 +16,12 @@ windows:
           - printf '\033]2;%s\033\\' 'odom_to_tf.py'
           - sleep 10
           - yarn shell || echo 'yarn not found. running on host'
-          - rosrun social_sim_ros odom_to_tf.py
-        - joy:
+          - rosrun social_sim_ros odom_to_tf.py _publish_map_frame:=true
+        - move_base:
+          - printf '\033]2;%s\033\\' 'odom_to_tf.py'
           - sleep 10
           - yarn shell || echo 'yarn not found. running on host'
-          - roslaunch --wait social_sim_teleop ps3_teleop.launch
+          - roslaunch --wait social_sim_ros jackal_move_base.launch
         - rqt_graph:
           - printf '\033]2;%s\033\\' 'rqt_graph'
           - sleep 10
@@ -37,10 +38,10 @@ windows:
           - yarn shell || echo 'yarn not found. running on host'
           - roslaunch --wait social_sim_ros differential_drive_jackal.launch
         - map_server:
-          - printf '\033]2;%s\033\\' 'outdoor_map_server.launch'
+          - printf '\033]2;%s\033\\' 'lab_map_server.launch'
           - sleep 10
           - yarn shell || echo 'yarn not found. running on host'
-          - roslaunch --wait social_sim_ros outdoor_map_server.launch
+          - roslaunch --wait social_sim_ros lab_map_server.launch
         - rviz:
           - printf '\033]2;%s\033\\' 'rviz'
           - sleep 10

@@ -16,7 +16,7 @@ windows:
           - printf '\033]2;%s\033\\' 'odom_to_tf.py'
           - sleep 10
           - yarn shell || echo 'yarn not found. running on host'
-          - rosrun social_sim_ros odom_to_tf.py
+          - rosrun social_sim_ros odom_to_tf.py _publish_map_frame:=true
         - joy:
           - printf '\033]2;%s\033\\' 'ps3_joy'
           - sleep 10
@@ -37,11 +37,11 @@ windows:
           - sleep 10
           - yarn shell || echo 'yarn not found. running on host'
           - roslaunch --wait social_sim_ros differential_drive_warthog.launch
-        - gmapping:
-          - printf '\033]2;%s\033\\' 'gmapping_warthog.launch'
+        - map_server:
+          - printf '\033]2;%s\033\\' 'outdoor_map_server.launch'
           - sleep 10
           - yarn shell || echo 'yarn not found. running on host'
-          - roslaunch --wait social_sim_ros gmapping_warthog.launch
+          - roslaunch --wait social_sim_ros outdoor_map_server.launch
         - rviz:
           - printf '\033]2;%s\033\\' 'rviz'
           - sleep 10
