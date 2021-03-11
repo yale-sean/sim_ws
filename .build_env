@@ -2,9 +2,18 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+link="${DIR}/social_sim_unity"
+if [ ! -L "${link}" ]; then
+  echo -e "\033[0;31mPlease soft-link ${link} to the folder you checked out from https://github.com/yale-sean/social_sim_unity\033[0m"
+  echo "  for example, if you cloned to your home directory:"
+  echo "    ln -s \$HOME/social_nav_sim ${link}"
+  exit 1
+fi
+
 echo "USERID=$(id -u)" > ${DIR}/.env
 echo "USERNAME=$(whoami)" >> ${DIR}/.env
 echo "GROUPID=$(id -g)" >> ${DIR}/.env
+echo "UNITYPROJECTPATH=$(readlink ${DIR}/social_sim_unity)" >> ${DIR}/.env
 echo "WORKSPACENAME=$(basename ${DIR})" >> ${DIR}/.env
 echo "DISPLAY=$(echo $DISPLAY)" >> ${DIR}/.env
 

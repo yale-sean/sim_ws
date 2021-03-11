@@ -1,4 +1,5 @@
 src
+bin
 databags
 experiments
 build.lock
@@ -13,3 +14,9 @@ node_modules
 logs/*
 tmp/*
 .bash_history
+social_sim_unity
+docker/images
+data
+data_bk
+navigation
+.vscode

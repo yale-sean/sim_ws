@@ -1,4 +1,5 @@
-FROM nvidia/cudagl:10.1-devel-ubuntu18.04
+#FROM ubuntu:18.04
+FROM dorowu/ubuntu-desktop-lxde-vnc:bionic
 LABEL maintainer "nathan@vertile.com"
 
 # user-specific arguments
@@ -30,44 +31,6 @@ ENV ROS_MASTER_URI=$ros_master_uri
 
 ENV NCCL_VERSION 2.4.2
 
-# nvidia setup
-# replace with other Ubuntu version if desired
-# https://github.com/osrf/rocker/blob/cd1aefff042539a7adc5e32a379f25d59de24b7b/src/rocker/templates/nvidia_snippet.Dockerfile.em
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libglvnd0\
-    libgl1 \
-    libglx0 \
-    libegl1 \
-    libgles2 \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY --from=nvidia/opengl:1.0-glvnd-runtime-ubuntu18.04 /usr/share/glvnd/egl_vendor.d/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
-ENV NVIDIA_VISIBLE_DEVICES ${NVIDIA_VISIBLE_DEVICES:-all}
-ENV NVIDIA_DRIVER_CAPABILITIES ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
-
-# utilities
-RUN apt-get update && apt-get install -q -y \
-    dirmngr \
-    apt-utils \
-    wget \
-    sudo \
-    vim \
-    xauth \
-    iproute2 \
-    net-tools \
-    gdb \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# opengl
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        pkg-config \
-        libxau-dev \
-        libxdmcp-dev \
-        libxcb1-dev \
-        libxext-dev \
-        libx11-dev && \
-    rm -rf /var/lib/apt/lists/*
-
 COPY scripts/bootstrap.sh /tmp/
 COPY scripts/packages.sh /tmp/
 
@@ -85,10 +48,6 @@ RUN mkdir -p /home/$username && \
     echo "${USERNAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USERNAME} && \
     chmod 0440 /etc/sudoers.d/${USERNAME} && \
     chown ${UID}:${GID} -R /home/${USERNAME}
-
-## vnc password / config
-RUN mkdir /home/${USERNAME}/.Xauthority && \
-    chown -R ${UID}:${GID} /home/${USERNAME}/.Xauthority
 
 USER ${uid}:${gid}
 WORKDIR /home/${USERNAME}
@@ -112,4 +71,5 @@ bind C-v run 'tmux set-buffer \$(reattach-to-user-namespace pbpaste); tmux paste
 bind -T copy-mode-vi y send-keys -X copy-pipe 'reattach-to-user-namespace pbcopy' \n\
 " >> /home/${USERNAME}/.tmux.conf
 
-ENTRYPOINT ["/bin/bash", "-l", "-c"]
+ENTRYPOINT ["/bin/bash", "-l"]
+

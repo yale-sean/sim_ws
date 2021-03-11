@@ -5,9 +5,9 @@ services:
     build:
       context: ./ros
       args:
-        userid: "${USERID}"
+        uid: "${USERID}"
         username: "${USERNAME}"
-        groupid: "${GROUPID}"
+        gid: "${GROUPID}"
         workspacename: "${WORKSPACENAME}"
     image: ros-build:social-sim
     runtime: nvidia
@@ -21,9 +21,9 @@ services:
     build:
       context: ./ros
       args:
-        userid: "${USERID}"
+        uid: "${USERID}"
         username: "${USERNAME}"
-        groupid: "${GROUPID}"
+        gid: "${GROUPID}"
         workspacename: "${WORKSPACENAME}"
     image: ros-master:social-sim
     networks:
@@ -43,9 +43,9 @@ services:
     build:
       context: ./ros
       args:
-        userid: "${USERID}"
+        uid: "${USERID}"
         username: "${USERNAME}"
-        groupid: "${GROUPID}"
+        gid: "${GROUPID}"
         workspacename: "${WORKSPACENAME}"
     image: ros-bridge:social-sim
     networks:
@@ -60,6 +60,31 @@ services:
     volumes:
       - ../:/home/${USERNAME}/${WORKSPACENAME}
       - ../../.bash_history:/home/${USERNAME}/.bash_history
+  # hosts web resources
+  nginx:
+    depends_on:
+      - "ros-bridge"
+    build:
+      context: ./nginx
+      args:
+        uid: "${USERID}"
+        username: "${USERNAME}"
+        gid: "${GROUPID}"
+        unityprojectpath: "${UNITYPROJECTPATH}"
+        workspacename: "${WORKSPACENAME}"
+    image: nginx:social-sim
+    networks:
+      - default
+    ports:
+      # host:container
+      - "8080:80"
+    environment:
+      - "ROS_MASTER_URI=http://ros-master:11311"
+    command: /home/${USERNAME}/${WORKSPACENAME}/docker/scripts/services/nginx.sh
+    user: "${USERID}:${GROUPID}"
+    volumes:
+      - ../:/home/${USERNAME}/${WORKSPACENAME}
+      - ${UNITYPROJECTPATH}/Build:/var/www/html
   # shell node for interactive usage
   ros-shell:
     depends_on:
@@ -67,9 +92,9 @@ services:
     build:
       context: ./ros
       args:
-        userid: "${USERID}"
+        uid: "${USERID}"
         username: "${USERNAME}"
-        groupid: "${GROUPID}"
+        gid: "${GROUPID}"
         workspacename: "${WORKSPACENAME}"
     image: ros-shell:social-sim
     networks:

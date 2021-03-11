@@ -18,9 +18,32 @@ Other repositories for the project are:
 
 Checkout this repository to `~/sim_ws`
 
-#### Docker
+### Linux Installation
 
-Install [docker](https://docs.docker.com/engine/install/ubuntu/), [nvidia docker](https://github.com/NVIDIA/nvidia-docker) and the [nvidia container runtime](https://github.com/nvidia/nvidia-container-runtime), and [docker-compose](https://docs.docker.com/compose/install/)
+Install docker and nvidia-docker, as described below, by running this one script on Linux:
+
+```
+sudo ./scripts/setup_docker.sh
+```
+
+After running the script
+
+### Mac Installation
+
+ROS will be run in an Ubuntu Docker container on your Mac. Install the following tools to enable this:
+
+- [Docker for Mac](https://docs.docker.com/docker-for-mac/install/)
+
+```
+brew install --cask docker
+```
+
+
+### Manual Linux Docker Installation
+
+Manual setup: The following is only required if you did NOT run the `./scripts/setup_docker.sh` file mentioned above.
+
+Install [docker](https://docs.docker.com/engine/install/ubuntu/), [nvidia docker](https://github.com/NVIDIA/nvidia-docker) and the [nvidia container runtime](https://github.com/nvidia/nvidia-container-runtime).
 
 Though nvidia-docker is deprecated, you'll need the following in `/etc/docker/daemon.json` (edit with sudo):
 
@@ -41,8 +64,28 @@ Then restart docker:
 sudo systemctl restart docker
 ```
 
-Install yarn: https://classic.yarnpkg.com/en/docs/install
+## Usage
 
-Then cd into `~/sim_ws` and run: `yarn build`, `yarn up`, and `yarn shell`, then `catkin build -c`
+The `./container` script wraps the `docker` command.
 
-Run `yarn shell` to open more terminals in the docker container
+Build the container once or when the `ros/Dockerfile` or `rosmac/Dockerfile` changes:
+
+To build the container:
+
+ - On Linux, run: `./container build ros`
+
+ - On Mac, run: `./container build rosmac`
+
+To build start container (e.g. run the virtual machine):
+
+ - On Linux, run: `./container start ros`
+
+ - On Mac, run: `./container start rosmac`
+
+To enter a shell on the running container:
+
+ - On Linux, run: `./container shell ros`
+
+ - On Mac, run: `./container shell rosmac`
+
+The `shell` command can be run multiple times.

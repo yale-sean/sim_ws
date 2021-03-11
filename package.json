@@ -11,7 +11,13 @@
     "up": "./.build_env && docker-compose -f docker/docker-compose.yml up",
     "kill": "./.build_env && docker-compose -f docker/docker-compose.yml kill",
     "shell": "./.build_env && docker-compose -f docker/docker-compose.yml run --service-ports ros-shell",
-    "sudo": "./.build_env && docker run -it --entrypoint=/bin/bash docker_ros-shell"
+    "sudo": "./.build_env && docker run -it --entrypoint=/bin/bash docker_ros-shell",
+    "game-build": "$HOME/Unity/Hub/Editor/2019.4.0f1/Editor/Unity -projectpath /$HOME/src/yale/social_sim_unity/ -batchmode -nographics -quit -stackTraceLogType Full -buildLinux64Player /$HOME/src/yale/social_sim_unity/Build/SurveyGame.x86_64",
+    "game-run": "/$HOME/src/yale/social_sim_unity/Build/SurveyGame.x86_64 -scene Scenes/AgentControlLabScene -avatar Female_Adult_04 -token fb98d7 -person_position SpawnLocation_Lab6 -robot_position SpawnLocation_Lab4",
+    "release-build": "rsync -avz social_sim_unity/Build/* bin/ && docker build -t novnc:social-sim -f docker/novnc/Dockerfile .",
+    "release-run": "docker run --device=/dev/dri -p 5901:5901 --expose=54998-55511 --gpus 1 novnc:social-sim -avatar Female_Adult_01 -scene Scenes/AgentControlLabScene -token 123test",
+    "release-save": "docker save novnc:social-sim | gzip > docker/images/novnc.tar.gz",
+    "release-load": "docker load < docker/images/novnc.tar.gz"
   },
   "author": "Nathan Tsoi <nathan.tsoi@yale.edu>",
   "license": "MIT"

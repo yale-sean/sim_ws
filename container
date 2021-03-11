@@ -1,0 +1,93 @@
+#!/bin/bash
+
+set -e
+set -x
+
+USAGE="$0 [command: build|start|stop|shell] [container name]"
+
+DOCKER_COMMAND=$1
+if [ -z "$DOCKER_COMMAND" ]; then
+  echo "Please specify a command."
+  echo $USAGE
+  exit
+fi
+
+CONTAINER_NAME=$2
+if [ -z "$CONTAINER_NAME" ]; then
+  echo "Please specify a container name."
+  echo $USAGE
+  exit
+fi
+
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+_GID=$(id -g)
+_UID=$(id -u)
+_UNAME=$(id -un)
+_WORKSPACENAME=sim_ws
+_UNITY_LOCATION=$(readlink -f $HOME/$_WORKSPACENAME/social_sim_unity)
+CONTAINER_FILE=$ROOT/docker/$CONTAINER_NAME/Dockerfile
+if test -f "$CONTAINER_FILE"; then
+    echo "$DOCKER_COMMAND $CONTAINER_NAME."
+else
+    echo "Cannot find $CONTAINER_NAME, make sure $CONTAINER_FILE exists"
+fi
+_DISPLAY="${DISPLAY-:1.0}"
+
+RUNNING_CONTAINER=$(docker container ls -q --filter name=$CONTAINER_NAME)
+
+EXEC="/bin/bash -l"
+# host-specific setup
+case "$(uname -s)" in
+   Darwin)
+     echo 'Mac OS X'
+     ;;
+   Linux)
+     echo 'Linux'
+     set +e
+     xhost +local:
+     set -e
+     HOST_FLAGS="--gpus all"
+     HOST_EXEC=$EXEC
+     ;;
+   CYGWIN*|MINGW32*|MSYS*|MINGW*)
+     echo 'MS Windows'
+     ;;
+   *)
+     echo 'Other OS'
+     ;;
+esac
+
+case $DOCKER_COMMAND in
+  build)
+    docker build \
+      --build-arg gid=$_GID \
+      --build-arg uid=$_UID \
+      --build-arg workspacename=$_WORKSPACENAME \
+      --build-arg username=$_UNAME \
+      -t $CONTAINER_NAME \
+      -f docker/$CONTAINER_NAME/Dockerfile $ROOT
+    ;;
+  start)
+    docker run --rm \
+      $HOST_FLAGS \
+      -v $HOME/$_WORKSPACENAME:/home/$_UNAME/sim_ws \
+      -v $_UNITY_LOCATION:$_UNITY_LOCATION \
+      -v /data:/data \
+      -v $HOME/.ssh/authorized_keys:/home/$_UNAME/.ssh/authorized_keys \
+      -v $HOME/.bash_history:/home/$_UNAME/.bash_history \
+      -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+      -v /dev/shm:/dev/shm \
+      -e DISPLAY=$_DISPLAY \
+      -p 6080:80 \
+      -p 9090:9090 \
+      -p 10000:10000 \
+      -it -d --name=$CONTAINER_NAME $CONTAINER_NAME $HOST_EXEC
+    ;;
+  stop)
+    docker stop $RUNNING_CONTAINER
+    ;;
+  shell):
+    docker exec -it $RUNNING_CONTAINER $EXEC
+    ;;
+esac
+
