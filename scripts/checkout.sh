@@ -5,7 +5,7 @@ set -x
 
 mkdir -p src
 pushd src
-git clone git@github.com:yale-img/social_sim_ros social_sim_ros
+git clone git@github.com:yale-sean/social_sim_ros social_sim_ros
 pushd social_sim_ros
 git submodule update --init --recursive
 popd
