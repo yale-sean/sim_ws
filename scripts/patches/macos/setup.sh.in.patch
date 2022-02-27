@@ -1,0 +1,11 @@
+--- setup.sh.in	2021-10-18 09:41:29.000000000 -0400
++++ src/catkin/cmake/templates/setup.sh.in	2021-10-18 09:41:27.000000000 -0400
+@@ -58,7 +58,7 @@
+   echo "Could not create temporary file: $_SETUP_TMP"
+   return 1
+ fi
+-CATKIN_SHELL=$CATKIN_SHELL "$_SETUP_UTIL" $@ ${CATKIN_SETUP_UTIL_ARGS:-} >> "$_SETUP_TMP"
++CATKIN_SHELL=`python3 "$_SETUP_UTIL" $@ ${CATKIN_SETUP_UTIL_ARGS:-}` >> "$_SETUP_TMP"
+ _RC=$?
+ if [ $_RC -ne 0 ]; then
+   if [ $_RC -eq 2 ]; then

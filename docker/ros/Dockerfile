@@ -1,4 +1,4 @@
-FROM nvidia/cudagl:10.1-devel-ubuntu18.04
+FROM nvidia/cudagl:11.1.1-devel-ubuntu20.04
 LABEL maintainer "nathan@vertile.com"
 
 # user-specific arguments
@@ -6,7 +6,7 @@ ARG uid
 ARG gid
 ARG workspacename
 ARG username
-ARG distro=melodic
+ARG distro=noetic
 ENV USERNAME=$username
 ENV WORKSPACENAME=$workspacename
 
@@ -41,7 +41,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgles2 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=nvidia/opengl:1.0-glvnd-runtime-ubuntu18.04 /usr/share/glvnd/egl_vendor.d/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
+COPY --from=nvidia/opengl:1.2-glvnd-runtime-ubuntu20.04 /usr/share/glvnd/egl_vendor.d/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
 ENV NVIDIA_VISIBLE_DEVICES ${NVIDIA_VISIBLE_DEVICES:-all}
 ENV NVIDIA_DRIVER_CAPABILITIES ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
 
@@ -82,7 +82,7 @@ ENV GID=$gid
 RUN mkdir -p /home/$username && \
     echo "${USERNAME}:x:${UID}:${GID}:${USERNAME},,,:/home/${USERNAME}:/bin/bash" >> /etc/passwd && \
     echo "${USERNAME}:x:${GID}:" >> /etc/group && \
-    echo "${USERNAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USERNAME} && \
+    echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} && \
     chmod 0440 /etc/sudoers.d/${USERNAME} && \
     chown ${UID}:${GID} -R /home/${USERNAME}
 
@@ -94,8 +94,24 @@ USER ${uid}:${gid}
 WORKDIR /home/${USERNAME}
 ENV HOME=/home/${USERNAME}
 
+# lifecycle_learning dependencies
+RUN python3 -m pip install --upgrade pip
+RUN /home/${USERNAME}/.local/bin/pip3 install pytorch-ignite torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+RUN /home/${USERNAME}/.local/bin/pip3 install \
+            sklearn \
+            numpy \
+            tensorboard \
+            pandas \
+            jupyterlab \
+            ipympl \
+            tqdm \
+            click seaborn \
+            pyyaml \
+            captum
+
+
 # setup ros
-RUN printf "source /opt/ros/melodic/setup.bash \n\
+RUN printf "source /opt/ros/${ROS_DISTRO}/setup.bash \n\
 FILE=/home/${USERNAME}/$workspacename/devel/setup.bash && test -f \$FILE && source \$FILE || true\n\
 export ROS_MASTER_URI=http://\$(hostname):11311 \n\
 export ROS_HOSTNAME=\$(hostname) \n\

@@ -34,42 +34,36 @@ apt-get install --no-install-recommends -y \
 
 # install bootstrap tools
 apt-get install --no-install-recommends -y \
-    python-catkin-tools \
-    python-rosinstall-generator \
-    python-rosdep \
-    python-rosinstall \
-    python-vcstools \
+    python3-catkin-tools \
+    python3-rosinstall-generator \
+    python3-rosdep \
+    python3-rosinstall \
+    python3-vcstools \
     libatlas-base-dev \
+    libbullet-dev \
     libjpeg-dev \
     libpng-dev \
     libblas-dev \
-    libgfortran-4.8-dev \
     libz-dev \
     libpcap-dev \
     libsvm-dev \
-    libcanberra-gtk-module \
+    libsdl-image1.2-dev \
+    libsdl-dev \
     pcl-tools \
-    python-webcolors \
-    python-pygame \
-    python-pip \
     python3-pip \
     python3-setuptools \
-    python3.7-venv \
-    xsltproc \
+    python3-venv \
+    xsltproc
 
 # bootstrap rosdep
 rosdep init || true
-rosdep update
+#rosdep update
 
 # install ros packages
 apt-get install -y \
-    ros-${ROS_DISTRO}-ros-core \
-    ros-${ROS_DISTRO}-ros-base \
-    ros-${ROS_DISTRO}-robot \
     ros-${ROS_DISTRO}-desktop \
-    ros-${ROS_DISTRO}-desktop-full \
 
 # pips
-pip install virtualenv future
+pip3 install virtualenv
 
 apt-get clean && rm -rf /var/lib/apt/lists/*

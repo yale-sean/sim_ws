@@ -1,0 +1,28 @@
+name: p3dx_mapping
+root: ~/sim_ws
+
+# NOTES:
+#  - Hold top left trigger button (1) to enable control
+#
+
+windows:
+  - dev_abuse:
+      layout: tiled
+      panes:
+        - shell:
+        - core:
+          - roscore
+        - joy:
+          - roslaunch --wait social_sim_teleop ps3_teleop_p3dx.launch
+        - p2os:
+          - roslaunch --wait social_sim_ros p2os_driver.launch
+        - zed:
+          - roslaunch zed_wrapper zed.launch
+        - sick_laser:
+          - roslaunch --wait sick_scan p3dx_lms100.launch 
+        - rviz:
+          - rosrun rviz rviz -d $(rospack find img_p3dx)/rviz/p3dx.rviz
+        - description:
+          - roslaunch --wait p2os_urdf pioneer3dx_urdf.launch
+        - mapping:
+          - rosrun gmapping slam_gmapping scan:=scan

@@ -1,5 +1,5 @@
 #FROM ubuntu:18.04
-FROM dorowu/ubuntu-desktop-lxde-vnc:bionic
+FROM dorowu/ubuntu-desktop-lxde-vnc:focal
 LABEL maintainer "nathan@vertile.com"
 
 # user-specific arguments
@@ -7,7 +7,7 @@ ARG uid
 ARG gid
 ARG workspacename
 ARG username
-ARG distro=melodic
+ARG distro=noetic
 ENV USERNAME=$username
 ENV WORKSPACENAME=$workspacename
 
@@ -39,6 +39,9 @@ RUN /tmp/bootstrap.sh $distro
 # ros packages
 RUN /tmp/packages.sh $distro
 
+# fix the costmap2d build... idk why this is necessary
+RUN sudo ln -sf /usr/include /include
+
 # user setup
 ENV UID=$uid
 ENV GID=$gid
@@ -54,7 +57,7 @@ WORKDIR /home/${USERNAME}
 ENV HOME=/home/${USERNAME}
 
 # setup ros
-RUN printf "source /opt/ros/melodic/setup.bash \n\
+RUN printf "source /opt/ros/${ROS_DISTRO}/setup.bash \n\
 FILE=/home/${USERNAME}/$workspacename/devel/setup.bash && test -f \$FILE && source \$FILE || true\n\
 export ROS_MASTER_URI=http://\$(hostname):11311 \n\
 export ROS_HOSTNAME=\$(hostname) \n\

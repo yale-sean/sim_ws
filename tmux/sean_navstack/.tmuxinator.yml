@@ -1,0 +1,24 @@
+name: sean_navstack
+root: ~/sim_ws
+
+windows:
+  - navstack:
+      layout: tiled
+      panes:
+        - shell:
+        - core:
+          - roscore
+        - bridge:
+          - roslaunch --wait social_sim_ros sim_tcp_bridge.launch
+        - move_base:
+          - roslaunch --wait social_sim_ros kuri_move_base.launch
+        - description:
+          - roslaunch --wait social_sim_ros kuri_description.launch
+        - map_publisher:
+          - rosrun social_sim_ros map_publisher.py
+        - trial_info:
+          - roslaunch --wait social_sim_ros trial_info.launch prefix:=./data/metrics/<%=@settings['task']%> condition:=navstack
+        - scan:
+          - roslaunch --wait social_sim_ros depth_to_laserscan.launch
+        - rviz:
+          - rosrun rviz rviz -d $(rospack find social_sim_ros)/config/move.rviz

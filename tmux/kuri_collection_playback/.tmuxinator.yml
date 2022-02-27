@@ -1,0 +1,28 @@
+name: kuri_collection_playback
+root: ~/sim_ws
+
+windows:
+  - playback:
+      layout: tiled
+      panes:
+        - shell:
+        - core:
+          - roscore
+        - bridge:
+          - roslaunch --wait social_sim_ros sim_tcp_bridge.launch
+        - unity:
+          - printf '\033]2;%s\033\\' 'unity'
+          #- ./social_sim_unity/Build/RobotControl.x86_64
+          #- ./src/social_sim_ros/social_sim_ros/scripts/interactive_scenarios.sh
+        - description:
+          - printf '\033]2;%s\033\\' 'kuri_description.launch'
+          - roslaunch --wait social_sim_ros kuri_description.launch
+        - differential_drive:
+          - printf '\033]2;%s\033\\' 'differential_drive_kuri.launch'
+          - roslaunch --wait social_sim_ros differential_drive_kuri.launch
+        - map_publisher:
+          - rosrun social_sim_ros map_publisher.py
+        - rviz:
+          - printf '\033]2;%s\033\\' 'rviz'
+          - rosrun rviz rviz -d $(rospack find social_sim_ros)/config/move.rviz
+

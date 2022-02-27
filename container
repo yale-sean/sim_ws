@@ -24,7 +24,22 @@ _GID=$(id -g)
 _UID=$(id -u)
 _UNAME=$(id -un)
 _WORKSPACENAME=sim_ws
-_UNITY_LOCATION=$(readlink -f $HOME/$_WORKSPACENAME/social_sim_unity)
+_UNITY_LOCATION=""
+case "$(uname -s)" in
+   Darwin)
+     _UNITY_LOCATION=$(readlink $HOME/$_WORKSPACENAME/social_sim_unity)
+     ;;
+   Linux)
+     _UNITY_LOCATION=$(readlink -f $HOME/$_WORKSPACENAME/social_sim_unity)
+     ;;
+   CYGWIN*|MINGW32*|MSYS*|MINGW*)
+     _UNITY_LOCATION=$(readlink -f $HOME/$_WORKSPACENAME/social_sim_unity)
+     ;;
+   *)
+     echo 'Other OS'
+     ;;
+esac
+
 CONTAINER_FILE=$ROOT/docker/$CONTAINER_NAME/Dockerfile
 if test -f "$CONTAINER_FILE"; then
     echo "$DOCKER_COMMAND $CONTAINER_NAME."
@@ -36,10 +51,12 @@ _DISPLAY="${DISPLAY-:1.0}"
 RUNNING_CONTAINER=$(docker container ls -q --filter name=$CONTAINER_NAME)
 
 EXEC="/bin/bash -l"
+MOUNT_DATA=""
 # host-specific setup
 case "$(uname -s)" in
    Darwin)
      echo 'Mac OS X'
+     MOUNT_DATA="-v $HOME/$_WORKSPACENAME/data:/data"
      ;;
    Linux)
      echo 'Linux'
@@ -48,6 +65,7 @@ case "$(uname -s)" in
      set -e
      HOST_FLAGS="--gpus all"
      HOST_EXEC=$EXEC
+     MOUNT_DATA="-v /data:/data"
      ;;
    CYGWIN*|MINGW32*|MSYS*|MINGW*)
      echo 'MS Windows'
@@ -71,8 +89,8 @@ case $DOCKER_COMMAND in
     docker run --rm \
       $HOST_FLAGS \
       -v $HOME/$_WORKSPACENAME:/home/$_UNAME/sim_ws \
-      -v $_UNITY_LOCATION:$_UNITY_LOCATION \
-      -v /data:/data \
+      -v $_UNITY_LOCATION:/home/$_UNAME/social_sim_unity \
+      $MOUNT_DATA \
       -v $HOME/.ssh/authorized_keys:/home/$_UNAME/.ssh/authorized_keys \
       -v $HOME/.bash_history:/home/$_UNAME/.bash_history \
       -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
@@ -89,5 +107,8 @@ case $DOCKER_COMMAND in
   shell):
     docker exec -it $RUNNING_CONTAINER $EXEC
     ;;
+   *)
+     echo Unknown Command $DOCKER_COMMAND
+     ;;
 esac
 

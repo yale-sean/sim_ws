@@ -23,10 +23,8 @@ Checkout this repository to `~/sim_ws`
 Install docker and nvidia-docker, as described below, by running this one script on Linux:
 
 ```
-sudo ./scripts/setup_docker.sh
+curl -L https://gist.githubusercontent.com/nathantsoi/e668e83f8cadfa0b87b67d18cc965bd3/raw/setup_docker.sh | sudo bash
 ```
-
-After running the script
 
 ### Mac Installation
 
@@ -36,32 +34,6 @@ ROS will be run in an Ubuntu Docker container on your Mac. Install the following
 
 ```
 brew install --cask docker
-```
-
-
-### Manual Linux Docker Installation
-
-Manual setup: The following is only required if you did NOT run the `./scripts/setup_docker.sh` file mentioned above.
-
-Install [docker](https://docs.docker.com/engine/install/ubuntu/), [nvidia docker](https://github.com/NVIDIA/nvidia-docker) and the [nvidia container runtime](https://github.com/nvidia/nvidia-container-runtime).
-
-Though nvidia-docker is deprecated, you'll need the following in `/etc/docker/daemon.json` (edit with sudo):
-
-```
-{
-    "runtimes": {
-        "nvidia": {
-            "path": "/usr/bin/nvidia-container-runtime",
-            "runtimeArgs": []
-        }
-    }
-}
-```
-
-Then restart docker:
-
-```
-sudo systemctl restart docker
 ```
 
 ## Usage
@@ -89,3 +61,38 @@ To enter a shell on the running container:
  - On Mac, run: `./container shell rosmac`
 
 The `shell` command can be run multiple times.
+
+## Packer
+
+```
+packer build packer/templates/aws_gpu_interactive_20_04.pkr.hcl
+```
+
+To debug:
+
+```
+packer build -debug packer/templates/aws_gpu_interactive_20_04.pkr.hcl
+```
+
+You'll see a line like, from which you should copy the key name:
+
+```
+amazon-ebs.sean-interactive: Saving key for debug purposes: ec2_sean-interactive.pem
+```
+
+Copy the IP from:
+
+```
+amazon-ebs.sean-interactive: Private IP: 10.5.198.30
+```
+
+The last step before the script is:
+```
+==> amazon-ebs.sean-interactive: Pausing after run of step 'StepSetGeneratedData'. Press enter to continue.
+```
+
+Then run:
+
+```
+ssh -i ec2_sean-interactive.pem ubuntu@10.5.198.30
+```

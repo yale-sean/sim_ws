@@ -1,0 +1,30 @@
+name: sean_joystick
+root: ~/sim_ws
+# Hold top left trigger button (1) to enable control
+windows:
+  - joystick:
+      layout: tiled
+      panes:
+        - shell:
+        - core:
+          - roscore
+        - bridge:
+          - roslaunch --wait social_sim_ros sim_tcp_bridge.launch
+        #- unity:
+        #  - python3 src/social_sim_ros/social_sim_ros/scripts/run_scenarios.py --only-warehouse --time_limit 4.0 --shuffle --dest_thresh 1.2
+        - move_base:
+          - roslaunch --wait social_sim_ros kuri_move_base_global_only.launch
+        - description:
+          - roslaunch --wait social_sim_ros kuri_description.launch
+        - map_publisher:
+          - rosrun social_sim_ros map_publisher.py
+        - recorder:
+          - rosrun social_sim_ros ros_controlled_recorder.py prefix:=/media/ntsoi/SEAN1/data/sim/
+        - scan:
+          - roslaunch --wait social_sim_ros depth_to_laserscan.launch
+        #- transform_agent_pose:
+        #  - rosrun social_sim_ros transform_agent_positions.py
+        - voice:
+          - roslaunch --wait ros_vosk ros_vosk.launch
+        - rviz:
+          - rosrun rviz rviz -d $(rospack find social_sim_ros)/config/move.rviz

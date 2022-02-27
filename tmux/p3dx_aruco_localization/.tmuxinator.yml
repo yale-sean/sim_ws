@@ -1,0 +1,34 @@
+name: p3dx_collection
+root: ~/sim_ws
+
+# NOTES:
+#  - Hold top left trigger button (1) to enable control
+#
+
+windows:
+  - dev_abuse:
+      layout: tiled
+      panes:
+        - shell:
+        - core:
+          - roscore
+        - joy:
+          - roslaunch --wait social_sim_teleop ps3_teleop_p3dx.launch
+        - p2os:
+          - roslaunch --wait social_sim_ros p2os_driver.launch
+        - rviz:
+          - rosrun rviz rviz -d $(rospack find img_p3dx)/rviz/p3dx.rviz
+          # - roslaunch fiducial_slam fiducial_rviz.launch
+        - description:
+          - roslaunch --wait p2os_urdf pioneer3dx_urdf.launch
+        - map_publisher:
+          - rosrun map_server map_server $(rospack find img_p3dx)/maps/lab1.map.yaml
+        - move_base:
+          - roslaunch --wait img_p3dx p3dx_move_base_global_only.launch
+        - realsense:
+          - roslaunch realsense2_camera rs_camera.launch
+        - aruco_detect:
+          - roslaunch img_p3dx p3dx_aruco_detect.launch
+        - fiducial_slam:
+          - roslaunch fiducial_slam fiducial_slam.launch
+        
