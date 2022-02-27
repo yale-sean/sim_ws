@@ -6,13 +6,13 @@ This is a [catkin workspace](http://wiki.ros.org/catkin/workspaces) project for 
 
 Other repositories for the project are:
 
-  - ROS project: https://github.com/yale-img/social_sim_ros
+  - ROS project: https://github.com/yale-sean/social_sim_ros
 
-  - Unity Project: https://github.com/yale-img/social_sim_unity
+  - Unity Project: https://github.com/yale-sean/social_sim_unity
 
-  - Documentation: https://github.com/yale-img/social-sim-docs
+  - Documentation: https://github.com/yale-sean/social-sim-docs
 
-  - Dockerized Catkin Workspace (this repository): https://github.com/yale-img/sim_ws
+  - Dockerized Catkin Workspace (this repository): https://github.com/yale-sean/sim_ws
   
 ## Installation
 

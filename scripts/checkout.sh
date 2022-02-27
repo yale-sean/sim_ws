@@ -24,9 +24,9 @@ git-clone-idem(){
 
 mkdir -p src
 pushd src
-git-clone-idem git@github.com:yale-img/social_sim_ros master "./social_sim_ros"
+git-clone-idem git@github.com:yale-sean/social_sim_ros master "./social_sim_ros"
 git-clone-idem https://github.com/Unity-Technologies/ROS-TCP-Endpoint.git "v0.6.0" "./ROS-TCP-Endpoint"
-git-clone-idem https://github.com/yale-img/kuri.git noetic-devel "./kuri"
+git-clone-idem https://github.com/yale-sean/kuri.git noetic-devel "./kuri"
 git-clone-idem https://github.com/ros-perception/depthimage_to_laserscan.git melodic-devel "./depthimage_to_laserscan"
 git-clone-idem https://github.com/nathantsoi/bag2video.git master "./bag2video"
 
