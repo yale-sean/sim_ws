@@ -1,4 +1,4 @@
-# Social Sim Catkin Workspace
+# Social Environment Autonomous Navigation 2.0
 
 This is a [catkin workspace](http://wiki.ros.org/catkin/workspaces) project for SEAN: Social Environment for Autonomous Navigation
 
