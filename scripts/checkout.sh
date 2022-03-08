@@ -13,9 +13,9 @@ git-clone-idem(){
     fi
     pushd $3
     BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    if ["$BRANCH" != $2 ]
+    if [ "$BRANCH" != "$2" ]
     then
-        git fetch && git checkout master
+        git fetch && git checkout $2
     fi
     git submodule update --init --recursive
     popd
@@ -31,4 +31,5 @@ git-clone-idem https://github.com/ros-perception/depthimage_to_laserscan.git mel
 git-clone-idem https://github.com/nathantsoi/bag2video.git master "./bag2video"
 
 popd
+source /opt/ros/noetic/setup.bash
 catkin_make
