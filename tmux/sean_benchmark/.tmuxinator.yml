@@ -1,25 +1,23 @@
-name: sean_tutorial
-root: ~/sim_ws
+name: project
+root: ~/ws_submission_<%= @settings["submission_id"] %>
 
 windows:
-  - navstack:
+  - benchmark:
       layout: tiled
       panes:
-        - shell:
+        - shell: tmux detach
         - core:
           - roscore
         - bridge:
           - roslaunch --wait social_sim_ros sim_tcp_bridge.launch
-        - move_base:
-          - rosrun social_sim_ros tutorial_controller.py
-          # The line below is used in the Submission Tutorial
-          # - roslaunch --wait example_submission submission.launch
+        - controller:
+          - roslaunch --wait <%= @settings["package"] %> submission.launch
         - description:
           - roslaunch --wait social_sim_ros kuri_description.launch
         - map_publisher:
           - rosrun social_sim_ros map_publisher.py
         - trial_info:
-          - roslaunch --wait social_sim_ros trial_info.launch prefix:=./data/metrics/<%=@settings['task']%> condition:=navstack
+          - roslaunch --wait social_sim_ros submission_trial_info.launch datapath:=~/ws_submission_<%= @settings["submission_id"] %>/data submission_id:=<%= @settings["submission_id"] %>
         - scan:
           - roslaunch --wait social_sim_ros depth_to_laserscan.launch
         - rviz:

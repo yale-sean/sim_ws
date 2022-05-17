@@ -12,21 +12,38 @@ windows:
         - shell:
         - core:
           - roscore
+        - enable_motors:
+          - sleep 5
+          - rostopic pub /cmd_motor_state p2os_msgs/MotorState 1
         - joy:
           - roslaunch --wait social_sim_teleop ps3_teleop_p3dx.launch
+        - joy_override:
+          - roslaunch --wait social_sim_teleop joystick_override.launch
         - p2os:
-          - roslaunch --wait social_sim_ros p2os_driver.launch
-        - zed:
-          - roslaunch zed_wrapper zed.launch
-        - sick_laser:
-          - roslaunch --wait sick_scan p3dx_lms100.launch 
-        - rviz:
-          - rosrun rviz rviz -d $(rospack find img_p3dx)/rviz/p3dx.rviz
+          - roslaunch --wait img_p3dx p2os_driver.launch
+        # - zed:
+        #   - roslaunch zed_wrapper zed.launch
+        # - sick_laser:
+        #   - roslaunch --wait sick_scan p3dx_lms100.launch 
+        #- rviz:
+        #  - rosrun rviz rviz -d $(rospack find img_p3dx)/rviz/p3dx.rviz
         - description:
           - roslaunch --wait p2os_urdf pioneer3dx_urdf.launch
-        - map_publisher:
-          - rosrun map_server map_server $(rospack find img_p3dx)/maps/lab1.map.yaml
-        - amcl:
-          - rosrun amcl amcl scan:=scan
+        #- map_publisher:
+        #  - rosrun map_server map_server $(rospack find img_p3dx)/maps/lab2.map.yaml
+        # - amcl:
+        #   - rosrun amcl amcl scan:=scan
+        # - move_base:
+        #   - roslaunch --wait img_p3dx p3dx_move_base.
+        #- zed:
+        #  - roslaunch zed_wrapper zed.launch cam_pitch:=-1.7 cam_pos_x:=-0.152 cam_pos_y:=0.018 cam_pos_z:=0.749
         - move_base:
           - roslaunch --wait img_p3dx p3dx_move_base.launch
+        #- realsense:
+        #  - roslaunch --wait realsense2_camera rs_camera.launch initial_reset:=true
+        #- aruco_detect:
+        #  - roslaunch --wait img_p3dx p3dx_aruco_detect.launch
+        #- fiducial_slam:
+        #  - roslaunch --wait fiducial_slam fiducial_slam.launch publish_tf:=false map_frame:=map_temp
+        #- fiducial_to_map:
+        #  - rosrun img_p3dx static_transform_publisher.py
